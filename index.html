@@ -5,26 +5,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Live Data Visualisation Dashboard</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="css/style.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <style>
-    body {
-      scroll-behavior: smooth;
-    }
-    section {
-      padding: 60px 0;
-    }
-    .chart-container {
-      position: relative;
-      height: 400px;
-    }
-  </style>
 </head>
 <body>
   <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
-    <div class="container-fluid">
+  <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+    <div class="container">
       <a class="navbar-brand" href="#">DataViz App</a>
-      <div class="collapse navbar-collapse">
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ms-auto">
           <li class="nav-item"><a class="nav-link" href="#crypto">Crypto</a></li>
           <li class="nav-item"><a class="nav-link" href="#weather">Weather</a></li>
@@ -37,10 +30,14 @@
   </nav>
 
   <!-- Introduction -->
-  <section class="bg-light text-center" id="intro">
-    <div class="container">
-      <h1 class="display-4">Welcome to the Data Visualisation Dashboard</h1>
-      <p class="lead">Live data from the world of Cryptocurrency and Weather, visualised using Chart.js.</p>
+  <section id="intro">
+    <div class="container text-center">
+      <h1 class="display-4 mb-4">Data Visualisation Dashboard</h1>
+      <p class="lead">Explore live data from Cryptocurrency and Weather APIs, beautifully visualized with Chart.js</p>
+      <div class="mt-4">
+        <a href="#crypto" class="btn btn-primary me-2">View Crypto Data</a>
+        <a href="#weather" class="btn btn-outline-primary">View Weather Data</a>
+      </div>
     </div>
   </section>
 
@@ -48,6 +45,38 @@
   <section id="crypto">
     <div class="container">
       <h2>Cryptocurrency Trends</h2>
+      <p>Real-time cryptocurrency price data, sourced from the CoinGecko API.</p>
+      
+      <div class="row mb-4">
+        <div class="col-md-6">
+          <div class="input-group mb-3">
+            <label class="input-group-text" for="cryptoSelect">Select Cryptocurrency:</label>
+            <select class="form-select" id="cryptoSelect">
+              <option value="bitcoin" selected>Bitcoin (BTC)</option>
+              <option value="ethereum">Ethereum (ETH)</option>
+              <option value="ripple">Ripple (XRP)</option>
+              <option value="cardano">Cardano (ADA)</option>
+              <option value="solana">Solana (SOL)</option>
+              <option value="dogecoin">Dogecoin (DOGE)</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="input-group">
+            <label class="input-group-text" for="timeRangeSelect">Time Range:</label>
+            <select class="form-select" id="timeRangeSelect">
+              <option value="0.04">1 Hour</option>
+              <option value="1">1 Day</option>
+              <option value="7" selected>7 Days</option>
+              <option value="30">1 Month</option>
+              <option value="90">3 Months</option>
+              <option value="365">1 Year</option>
+              <option value="max">All Time</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      
       <div class="chart-container">
         <canvas id="cryptoChart"></canvas>
       </div>
@@ -58,8 +87,70 @@
   <section class="bg-light" id="weather">
     <div class="container">
       <h2>Weather Comparison</h2>
-      <div class="chart-container">
+      <p>Current weather conditions across cities, powered by the OpenWeatherMap API.</p>
+      
+      <div class="row mb-4">
+        <div class="col-md-6">
+          <div class="input-group mb-3">
+            <label class="input-group-text" for="weatherView">View:</label>
+            <select class="form-select" id="weatherView">
+              <option value="temperature" selected>Temperature</option>
+              <option value="humidity">Humidity</option>
+              <option value="windspeed">Wind Speed</option>
+              <option value="pressure">Pressure</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="input-group">
+            <label class="input-group-text" for="temperatureUnit">Unit:</label>
+            <select class="form-select" id="temperatureUnit">
+              <option value="metric" selected>Celsius (°C)</option>
+              <option value="imperial">Fahrenheit (°F)</option>
+              <option value="standard">Kelvin (K)</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      
+      <div class="row" id="weatherCards">
+        <!-- Weather cards will be inserted here -->
+      </div>
+      
+      <div class="chart-container mt-4">
         <canvas id="weatherChart"></canvas>
+      </div>
+      
+      <div class="text-center mt-4">
+        <button id="addCityBtn" class="btn btn-outline-primary">
+          <i class="bi bi-plus-circle"></i> Add City
+        </button>
+      </div>
+      
+      <!-- Add City Modal -->
+      <div class="modal fade" id="addCityModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Add a City</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <div class="mb-3">
+                <label for="citySearch" class="form-label">City Name</label>
+                <input type="text" class="form-control" id="citySearch" placeholder="Enter city name...">
+                <div class="form-text">Enter a city name to add it to the dashboard.</div>
+              </div>
+              <div id="citySearchResults" class="list-group">
+                <!-- Search results go here -->
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+              <button type="button" class="btn btn-primary" id="searchCityBtn">Search</button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -68,11 +159,184 @@
   <section id="tutorial1">
     <div class="container">
       <h2>API Guide</h2>
-      <p>This section explains how to find public APIs and access their data using JavaScript's <code>fetch()</code> function.</p>
-      <ul>
-        <li><a href="https://www.coingecko.com/en/api">CoinGecko API</a> for crypto data</li>
-        <li><a href="https://openweathermap.org/api">OpenWeatherMap API</a> for weather data</li>
-      </ul>
+      <p>This section explains how to find, utilize, and implement public APIs for your data visualization projects.</p>
+      
+      <div class="row mt-4">
+        <div class="col-md-6">
+          <div class="card mb-3">
+            <div class="card-body">
+              <h5 class="card-title">CoinGecko API</h5>
+              <p class="card-text">Free cryptocurrency data API with extensive coin information and market data.</p>
+              <p><strong>Key Features:</strong></p>
+              <ul>
+                <li>Historical price data</li>
+                <li>Market capitalization</li>
+                <li>Trading volume</li>
+                <li>No API key required for basic usage</li>
+              </ul>
+              <p><strong>Endpoints Used:</strong></p>
+              <pre><code>/coins/{id}/market_chart?vs_currency=usd&days={range}</code></pre>
+              <a href="https://www.coingecko.com/en/api" class="btn btn-sm btn-outline-primary" target="_blank">Documentation</a>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="card mb-3">
+            <div class="card-body">
+              <h5 class="card-title">OpenWeatherMap API</h5>
+              <p class="card-text">Weather data API providing current conditions, forecasts, and historical data.</p>
+              <p><strong>Key Features:</strong></p>
+              <ul>
+                <li>Current weather data</li>
+                <li>5-day forecast</li>
+                <li>Weather maps</li>
+                <li>Requires free API key (limited requests)</li>
+              </ul>
+              <p><strong>Endpoints Used:</strong></p>
+              <pre><code>/data/2.5/weather?id={city_id}&units={unit}&appid={api_key}</code></pre>
+              <a href="https://openweathermap.org/api" class="btn btn-sm btn-outline-primary" target="_blank">Documentation</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="mt-5">
+        <h4>Understanding API Basics</h4>
+        <p>APIs (Application Programming Interfaces) allow applications to communicate with each other, enabling access to data and functionality from external services.</p>
+        
+        <div class="row mt-3">
+          <div class="col-md-6">
+            <h5>Authentication Methods</h5>
+            <div class="table-responsive">
+              <table class="table table-bordered">
+                <thead class="table-light">
+                  <tr>
+                    <th>Method</th>
+                    <th>Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>API Key</td>
+                    <td>A unique identifier passed with each request (e.g., <code>?api_key=YOUR_KEY</code>)</td>
+                  </tr>
+                  <tr>
+                    <td>Bearer Token</td>
+                    <td>Authentication token included in the header (<code>Authorization: Bearer TOKEN</code>)</td>
+                  </tr>
+                  <tr>
+                    <td>OAuth</td>
+                    <td>Secure delegated access using temporary tokens</td>
+                  </tr>
+                  <tr>
+                    <td>No Auth</td>
+                    <td>Public APIs with no authentication requirements</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <h5>Common HTTP Methods</h5>
+            <div class="table-responsive">
+              <table class="table table-bordered">
+                <thead class="table-light">
+                  <tr>
+                    <th>Method</th>
+                    <th>Usage</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>GET</td>
+                    <td>Retrieve data (used in this dashboard)</td>
+                  </tr>
+                  <tr>
+                    <td>POST</td>
+                    <td>Create new data</td>
+                  </tr>
+                  <tr>
+                    <td>PUT</td>
+                    <td>Update existing data</td>
+                  </tr>
+                  <tr>
+                    <td>DELETE</td>
+                    <td>Remove data</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="mt-4">
+        <h5>Basic API Fetch Example:</h5>
+        <pre><code>// Simple GET request
+fetch('https://api.example.com/data')
+  .then(response => {
+    // Check if the request was successful
+    if (!response.ok) {
+      throw new Error(`HTTP error: ${response.status}`);
+    }
+    return response.json();  // Parse JSON response
+  })
+  .then(data => {
+    console.log(data);
+    // Process your data here
+  })
+  .catch(error => console.error('Error:', error));</code></pre>
+      </div>
+      
+      <div class="mt-4">
+        <h5>API with Authentication Example:</h5>
+        <pre><code>// GET request with API key
+const apiKey = 'your_api_key_here';
+const url = `https://api.example.com/data?api_key=${apiKey}`;
+
+fetch(url)
+  .then(response => response.json())
+  .then(data => {
+    // Work with the returned data
+    displayData(data);
+  })
+  .catch(error => {
+    console.error('Error fetching data:', error);
+    showErrorMessage(error.message);
+  });</code></pre>
+      </div>
+      
+      <div class="mt-4 mb-3">
+        <h5>Finding Free APIs for Projects</h5>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="card h-100">
+              <div class="card-body">
+                <h6 class="card-title">Public API Directories</h6>
+                <ul>
+                  <li><a href="https://github.com/public-apis/public-apis" target="_blank">GitHub Public APIs</a> - Categorized list of free APIs</li>
+                  <li><a href="https://rapidapi.com/hub" target="_blank">RapidAPI Hub</a> - API marketplace with free tiers</li>
+                  <li><a href="https://any-api.com/" target="_blank">Any-API</a> - Documentation and test consoles</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="card h-100">
+              <div class="card-body">
+                <h6 class="card-title">API Best Practices</h6>
+                <ul>
+                  <li>Store API keys securely (environment variables)</li>
+                  <li>Implement error handling for API failures</li>
+                  <li>Add loading states during API requests</li>
+                  <li>Consider rate limits to avoid being blocked</li>
+                  <li>Cache responses when appropriate</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -80,13 +344,181 @@
   <section class="bg-light" id="tutorial2">
     <div class="container">
       <h2>Chart.js Visualisation Guide</h2>
-      <p>To render charts, we use Chart.js. It allows easy creation of line and bar charts from fetched data.</p>
-      <pre><code>// Example
+      <p>Learn how to transform API data into beautiful, interactive charts using Chart.js.</p>
+      
+      <div class="row mt-4">
+        <div class="col-md-6">
+          <div class="card mb-3">
+            <div class="card-body">
+              <h5 class="card-title">Chart Types</h5>
+              <p>Chart.js supports various visualization types:</p>
+              <div class="row">
+                <div class="col-6">
+                  <ul>
+                    <li><strong>Line</strong> - Time series, trends</li>
+                    <li><strong>Bar</strong> - Comparisons, categories</li>
+                    <li><strong>Pie/Doughnut</strong> - Parts of a whole</li>
+                    <li><strong>Radar</strong> - Multi-variable data</li>
+                  </ul>
+                </div>
+                <div class="col-6">
+                  <ul>
+                    <li><strong>Polar Area</strong> - Similar to pie charts</li>
+                    <li><strong>Scatter</strong> - Correlation, distribution</li>
+                    <li><strong>Bubble</strong> - Three dimensions of data</li>
+                    <li><strong>Mixed</strong> - Combination of types</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="card mb-3">
+            <div class="card-body">
+              <h5 class="card-title">Key Features</h5>
+              <ul>
+                <li><strong>Responsive</strong> - Adapts to container size</li>
+                <li><strong>Interactive</strong> - Tooltips, hover effects</li>
+                <li><strong>Animations</strong> - Smooth transitions</li>
+                <li><strong>Customizable</strong> - Colors, fonts, styling</li>
+                <li><strong>Lightweight</strong> - Small file size, fast loading</li>
+                <li><strong>Plugins</strong> - Extend with additional features</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="row mt-4">
+        <div class="col-12">
+          <div class="card mb-3">
+            <div class="card-body">
+              <h5 class="card-title">Basic Chart Setup</h5>
+              <p>This is the standard pattern for creating a chart with Chart.js:</p>
+              <pre><code>// 1. Get the canvas element
+const ctx = document.getElementById('myChart').getContext('2d');
+
+// 2. Create the chart
+const myChart = new Chart(ctx, {
+  type: 'line',  // chart type: line, bar, pie, etc.
+  data: {
+    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'],
+    datasets: [{
+      label: 'Dataset Name',
+      data: [10, 20, 15, 35, 25],
+      borderColor: '#3498db',
+      backgroundColor: 'rgba(52, 152, 219, 0.1)'
+    }]
+  },
+  options: {
+    responsive: true,
+    // Additional configuration options
+  }
+});</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="row mt-4">
+        <div class="col-md-6">
+          <div class="card mb-3">
+            <div class="card-body">
+              <h5 class="card-title">Line Chart Example</h5>
+              <p>Used in our Crypto Dashboard:</p>
+              <pre><code>// Line chart for time series data
 new Chart(ctx, {
   type: 'line',
-  data: data,
-  options: options
+  data: {
+    labels: dateLabels,
+    datasets: [{
+      label: 'Bitcoin Price (USD)',
+      data: priceValues,
+      borderColor: '#f39c12',
+      backgroundColor: 'rgba(243, 156, 18, 0.1)',
+      tension: 0.3,  // Curved lines
+      fill: true     // Fill area under line
+    }]
+  },
+  options: {
+    scales: {
+      y: {
+        beginAtZero: false
+      }
+    }
+  }
 });</code></pre>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="card mb-3">
+            <div class="card-body">
+              <h5 class="card-title">Bar Chart Example</h5>
+              <p>Used in our Weather Dashboard:</p>
+              <pre><code>// Bar chart for comparison data
+new Chart(ctx, {
+  type: 'bar',
+  data: {
+    labels: cityNames,
+    datasets: [{
+      label: 'Temperature (°C)',
+      data: temperatures,
+      backgroundColor: colors,
+      borderRadius: 6,  // Rounded corners
+      barThickness: 40  // Width of bars
+    }]
+  },
+  options: {
+    scales: {
+      y: {
+        beginAtZero: true
+      }
+    }
+  }
+});</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="row mt-4">
+        <div class="col-md-6">
+          <div class="card mb-3">
+            <div class="card-body">
+              <h5 class="card-title">Updating Charts</h5>
+              <p>Charts can be updated dynamically:</p>
+              <pre><code>// Store chart reference
+let myChart;
+
+function createChart() {
+  myChart = new Chart(ctx, {...});
+}
+
+function updateChart(newData) {
+  // Update data
+  myChart.data.datasets[0].data = newData;
+  
+  // Redraw the chart
+  myChart.update();
+}</code></pre>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="card mb-3">
+            <div class="card-body">
+              <h5 class="card-title">Resources</h5>
+              <ul>
+                <li><a href="https://www.chartjs.org/docs/" target="_blank">Chart.js Documentation</a></li>
+                <li><a href="https://www.chartjs.org/samples/" target="_blank">Chart.js Examples</a></li>
+                <li><a href="https://github.com/chartjs/awesome" target="_blank">Awesome Chart.js</a> - Plugins & extensions</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -94,15 +526,36 @@ new Chart(ctx, {
   <section id="author">
     <div class="container text-center">
       <h2>About the Author</h2>
-      <p>Created by Greg Black<br>Email: <a href="mailto:GBLACK301@caledonian.ac.uk">GBLACK301@caledonian.ac.uk</a><br>
-      GitHub: <a href="https://github.com/GregBlack2001" target="_blank">GregBlack2001</a></p>
+      <div class="row justify-content-center">
+        <div class="col-md-6">
+          <div class="card">
+            <div class="card-body">
+              <h4 class="card-title">Greg Black</h4>
+              <p class="card-text">Data visualization enthusiast and web developer.</p>
+              <div class="mb-3">
+                <a href="mailto:GBLACK301@caledonian.ac.uk" class="btn btn-sm btn-outline-primary me-2">
+                  <i class="bi bi-envelope"></i> Email
+                </a>
+                <a href="https://github.com/GregBlack2001" target="_blank" class="btn btn-sm btn-outline-dark">
+                  <i class="bi bi-github"></i> GitHub
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
-  <footer class="bg-dark text-white text-center py-3">
-    <p>&copy; 2025 Data Visualisation App | Greg Black</p>
+  <footer class="text-white text-center py-4">
+    <div class="container">
+      <p class="m-0">&copy; 2025 Data Visualisation App | Greg Black</p>
+      <small>Built with Bootstrap and Chart.js</small>
+    </div>
   </footer>
 
+  <!-- Bootstrap JS Bundle with Popper -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
   <script src="js/crypto.js"></script>
   <script src="js/weather.js"></script>
 </body>
