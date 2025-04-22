@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Live Data Visualisation Dashboard</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      scroll-behavior: smooth;
+    }
+    section {
+      padding: 60px 0;
+    }
+    .chart-container {
+      position: relative;
+      height: 400px;
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">DataViz App</a>
+      <div class="collapse navbar-collapse">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="#crypto">Crypto</a></li>
+          <li class="nav-item"><a class="nav-link" href="#weather">Weather</a></li>
+          <li class="nav-item"><a class="nav-link" href="#tutorial1">API Guide</a></li>
+          <li class="nav-item"><a class="nav-link" href="#tutorial2">Chart Guide</a></li>
+          <li class="nav-item"><a class="nav-link" href="#author">Author</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Introduction -->
+  <section class="bg-light text-center" id="intro">
+    <div class="container">
+      <h1 class="display-4">Welcome to the Data Visualisation Dashboard</h1>
+      <p class="lead">Live data from the world of Cryptocurrency and Weather, visualised using Chart.js.</p>
+    </div>
+  </section>
+
+  <!-- Crypto Dashboard -->
+  <section id="crypto">
+    <div class="container">
+      <h2>Cryptocurrency Trends</h2>
+      <div class="chart-container">
+        <canvas id="cryptoChart"></canvas>
+      </div>
+    </div>
+  </section>
+
+  <!-- Weather Dashboard -->
+  <section class="bg-light" id="weather">
+    <div class="container">
+      <h2>Weather Comparison</h2>
+      <div class="chart-container">
+        <canvas id="weatherChart"></canvas>
+      </div>
+    </div>
+  </section>
+
+  <!-- Tutorial 1 -->
+  <section id="tutorial1">
+    <div class="container">
+      <h2>API Guide</h2>
+      <p>This section explains how to find public APIs and access their data using JavaScript's <code>fetch()</code> function.</p>
+      <ul>
+        <li><a href="https://www.coingecko.com/en/api">CoinGecko API</a> for crypto data</li>
+        <li><a href="https://openweathermap.org/api">OpenWeatherMap API</a> for weather data</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Tutorial 2 -->
+  <section class="bg-light" id="tutorial2">
+    <div class="container">
+      <h2>Chart.js Visualisation Guide</h2>
+      <p>To render charts, we use Chart.js. It allows easy creation of line and bar charts from fetched data.</p>
+      <pre><code>// Example
+new Chart(ctx, {
+  type: 'line',
+  data: data,
+  options: options
+});</code></pre>
+    </div>
+  </section>
+
+  <!-- Author Section -->
+  <section id="author">
+    <div class="container text-center">
+      <h2>About the Author</h2>
+      <p>Created by Greg Black<br>Email: <a href="mailto:GBLACK301@caledonian.ac.uk">GBLACK301@caledonian.ac.uk</a><br>
+      GitHub: <a href="https://github.com/GregBlack2001" target="_blank">GregBlack2001</a></p>
+    </div>
+  </section>
+
+  <footer class="bg-dark text-white text-center py-3">
+    <p>&copy; 2025 Data Visualisation App | Greg Black</p>
+  </footer>
+
+  <script src="js/crypto.js"></script>
+  <script src="js/weather.js"></script>
+</body>
+</html>
